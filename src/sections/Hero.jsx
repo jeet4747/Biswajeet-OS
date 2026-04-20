@@ -2,163 +2,147 @@ import React from 'react';
 import Section from '../components/Section';
 import { Terminal, Code } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-
-// Unique 3D Core floating behind your image
-function QuantumCore() {
-  const coreRef = React.useRef();
-  const ringRef1 = React.useRef();
-  const ringRef2 = React.useRef();
-
-  useFrame((state) => {
-    const time = state.clock.elapsedTime;
-    coreRef.current.rotation.x = time * 0.2;
-    coreRef.current.rotation.y = time * 0.3;
-    
-    // Mouse reactive rings
-    ringRef1.current.rotation.z -= 0.01;
-    ringRef1.current.rotation.x = Math.sin(time) * 0.3 + (state.pointer.y * 0.5);
-    ringRef1.current.rotation.y = state.pointer.x * 0.5;
-
-    ringRef2.current.rotation.z += 0.015;
-    ringRef2.current.rotation.x = Math.cos(time) * 0.2 + (state.pointer.y * 0.5);
-  });
-
-  return (
-    <group>
-      <mesh ref={coreRef}>
-        <icosahedronGeometry args={[1.8, 1]} />
-        <meshBasicMaterial color="#7B61FF" wireframe transparent opacity={0.3} />
-      </mesh>
-      <mesh ref={ringRef1}>
-        <torusGeometry args={[2.8, 0.02, 16, 100]} />
-        <meshBasicMaterial color="#00D4FF" transparent opacity={0.6} />
-      </mesh>
-      <mesh ref={ringRef2}>
-        <torusGeometry args={[3.2, 0.01, 16, 100]} />
-        <meshBasicMaterial color="#00FFA3" transparent opacity={0.4} />
-      </mesh>
-    </group>
-  );
-}
 
 export default function Hero() {
   return (
-    <Section id="hero" className="justify-center items-start overflow-hidden">
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between w-full gap-12 relative z-10 mt-10">
-        
-        {/* Left Side: System Output Copy */}
-        <div className="w-full lg:w-7/12 relative">
-          <div className="glass-card p-1 max-w-max inline-block mb-6 rounded-full border-electric/30 border shadow-[0_0_15px_rgba(0,212,255,0.1)]">
-            <div className="px-4 py-2 bg-space/80 backdrop-blur-xl rounded-full text-xs font-mono text-electric flex items-center gap-2 uppercase tracking-wider">
-              <div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_#00FFA3]" />
+    <Section className="justify-center items-start min-h-screen">
+        <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-12 pt-20 lg:pt-0">
+
+          {/* ── Left: Copy ── */}
+          <motion.div
+            className="w-full lg:w-7/12 relative z-10"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
+            {/* Status badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-electric/30 bg-space/80 backdrop-blur-xl text-xs font-mono text-electric uppercase tracking-wider mb-7">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_6px_#00FFA3]" />
               System Status: Online & Ready
             </div>
-          </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 leading-tight text-white relative">
-            I don't just build products. <br />
-            <span className="text-glow-neon text-transparent bg-clip-text bg-gradient-to-r from-neon via-electric to-white relative z-10">
-              I run them.
-            </span>
-            <span className="absolute -inset-2 bg-electric/10 blur-3xl rounded-full -z-10" />
-          </h1>
+            {/* Headline */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.05] mb-5">
+              <span className="text-white block">I don't just build</span>
+              <span className="text-white block">products.</span>
+              <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-neon via-electric to-accent">
+                I run them.
+              </span>
+            </h1>
 
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl font-mono mb-8 opacity-90 border-l-2 border-electric pl-4">
-            React • Growth • Ads • Infra • Content
-          </p>
+            {/* Subline */}
+            <p className="text-base md:text-lg text-gray-400 font-mono mb-9 border-l-2 border-electric/60 pl-4 max-w-lg">
+              React&nbsp;•&nbsp;Growth&nbsp;•&nbsp;Ads&nbsp;•&nbsp;Infra&nbsp;•&nbsp;Content
+            </p>
 
-          {/* System Info UI */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10 w-full max-w-2xl">
-            <div className="glass-card p-4 flex flex-col gap-1 border-white/5 hover:border-electric/30 transition-colors">
-              <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">Location Status</span>
-              <span className="text-sm font-mono text-white">Pune <span className="text-electric">→</span> Bangalore</span>
+            {/* System Info Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-10 max-w-2xl">
+              {[
+                { label: 'Currently At',  value: 'Neoskills',            color: 'text-electric' },
+                { label: 'Role',          value: 'Frontend Dev → Product', color: 'text-accent' },
+                { label: 'Network',       value: '4K+ LinkedIn Reach',   color: 'text-neon',   hide: true },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className={`glass-card p-4 border-white/5 hover:border-white/20 transition-colors flex flex-col gap-1 ${item.hide ? 'hidden lg:flex' : ''}`}
+                >
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-gray-500">{item.label}</span>
+                  <span className={`text-sm font-mono ${item.color}`}>{item.value}</span>
+                </div>
+              ))}
             </div>
-            <div className="glass-card p-4 flex flex-col gap-1 border-white/5 hover:border-neon/30 transition-colors">
-               <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">Role Protocol</span>
-               <span className="text-sm font-mono text-accent">Product/Growth Eng.</span>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-4">
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-7 py-3.5 bg-electric/10 text-electric border border-electric rounded-lg font-mono font-bold tracking-widest uppercase text-sm hover:bg-electric/20 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.15)]"
+              >
+                <Terminal size={16} />
+                Hook In
+              </motion.a>
+              <motion.a
+                href="#product"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-7 py-3.5 bg-white/5 text-white border border-white/10 rounded-lg font-mono font-bold tracking-widest uppercase text-sm hover:bg-white/10 transition-all flex items-center gap-2"
+              >
+                <Code size={16} />
+                View Work
+              </motion.a>
             </div>
-            <div className="glass-card p-4 flex flex-col gap-1 border-white/5 hidden lg:flex hover:border-white/30 transition-colors">
-               <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">System Auth</span>
-               <span className="text-sm font-mono text-neon">root@biswajeet-os</span>
-            </div>
-          </div>
+          </motion.div>
 
-          {/* Call to Actions */}
-          <div className="flex flex-wrap gap-4">
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-electric/10 text-electric border border-electric glow-border rounded-lg font-mono font-medium tracking-widest uppercase text-sm hover:bg-electric/20 transition-all font-bold flex items-center gap-2"
-            >
-              <Terminal size={18} />
-              Hook In
-            </motion.button>
-            <motion.a
-              href="#product"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white/5 text-white border border-white/10 rounded-lg font-mono font-medium tracking-widest uppercase text-sm hover:bg-white/10 transition-all flex items-center gap-2 group"
-            >
-              <Code size={18} className="group-hover:text-neon transition-colors" />
-              Analyze Code
-            </motion.a>
-          </div>
-        </div>
+          {/* ── Right: Holographic Identity Frame ── */}
+          <motion.div
+            className="w-full lg:w-5/12 flex items-center justify-center relative"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
+          >
+            <div className="relative w-72 h-72 md:w-80 md:h-80 float-image">
 
-        {/* Right Side: Identity Core / Hologram Photo */}
-        <div className="w-full lg:w-5/12 flex items-center justify-center relative min-h-[400px]">
-           
-           {/* Dedicated 3D Canvas specifically rendering behind and around the image */}
-           <div className="absolute inset-0 z-0">
-             <Canvas camera={{ position: [0, 0, 5] }} gl={{ alpha: true }}>
-               <ambientLight intensity={0.5} />
-               <QuantumCore />
-             </Canvas>
-           </div>
-
-           {/* The Image HUD element */}
-           <div className="relative z-10 w-72 h-72 md:w-80 md:h-80 group mt-10 lg:mt-0">
-              
-              {/* Spinning Tech HUD Frames */}
-              <div className="absolute -inset-4 border-2 border-dashed border-electric/30 rounded-full animate-[spin_20s_linear_infinite] group-hover:border-electric/80 transition-colors shadow-[0_0_20px_rgba(0,212,255,0.2)]" />
-              <div className="absolute -inset-8 border border-neon/20 rounded-full animate-[spin_30s_linear_infinite_reverse] group-hover:border-neon/60 transition-colors opacity-70" />
-              <div className="absolute -inset-12 border-4 border-dotted border-accent/10 rounded-full animate-[spin_40s_linear_infinite] opacity-30" />
-              
-              {/* Corner Targeting elements */}
-              <div className="absolute -top-4 -left-4 w-6 h-6 border-t-2 border-l-2 border-electric" />
-              <div className="absolute -bottom-4 -right-4 w-6 h-6 border-b-2 border-r-2 border-neon" />
-
-              {/* The Central Mask & Image */}
-              <div className="w-full h-full bg-space border border-white/10 p-2 rounded-full overflow-hidden relative shadow-2xl">
-                 
-                 {/* CSS Scanning Laser down the image */}
-                 <div className="absolute inset-0 overflow-hidden rounded-full z-20 pointer-events-none">
-                     <div className="w-full h-[2px] bg-electric/80 shadow-[0_0_15px_#00D4FF] absolute animate-[scan_3s_linear_infinite]" />
-                 </div>
-                 
-                 <img 
-                    src="/profile.jpg" 
-                    alt="Biswajeet System Administrator" 
-                    className="w-full h-full object-cover rounded-full grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                    onError={(e) => {
-                       // Temporary fallback incase the image isn't placed yet.
-                       e.target.src = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop"; 
-                    }}
-                 />
-                 
-                 {/* Soft blend overlay for tech look */}
-                 <div className="absolute inset-0 bg-blue-900/20 mix-blend-color-burn group-hover:bg-transparent transition-colors z-10" />
+              {/* ── Spinning rings ── */}
+              {/* Ring 1 */}
+              <div className="ring-1 absolute inset-0 flex items-center justify-center pointer-events-none"
+                   style={{ inset: '-28px' }}>
+                <div className="w-full h-full rounded-full border-2 border-dashed border-electric/40"
+                     style={{ boxShadow: '0 0 18px rgba(0,212,255,0.12)' }} />
               </div>
-              
-              {/* Status Readout Badge overlay */}
-              <div className="absolute bottom-4 right-0 transform translate-x-1/4 bg-space/90 backdrop-blur-md border border-white/10 px-3 py-1 rounded shadow-lg">
-                 <span className="text-[10px] font-mono text-accent block uppercase tracking-widest">ID: B-0SV1</span>
+              {/* Ring 2 */}
+              <div className="ring-2 absolute flex items-center justify-center pointer-events-none"
+                   style={{ inset: '-48px' }}>
+                <div className="w-full h-full rounded-full border border-neon/30" />
               </div>
-           </div>
+              {/* Ring 3 */}
+              <div className="ring-3 absolute flex items-center justify-center pointer-events-none"
+                   style={{ inset: '-64px' }}>
+                <div className="w-full h-full rounded-full border border-dotted border-accent/20" />
+              </div>
+
+              {/* ── Corner targeting brackets ── */}
+              <div className="absolute -top-3 -left-3 w-5 h-5 border-t-2 border-l-2 border-electric" />
+              <div className="absolute -top-3 -right-3 w-5 h-5 border-t-2 border-r-2 border-electric" />
+              <div className="absolute -bottom-3 -left-3 w-5 h-5 border-b-2 border-l-2 border-neon" />
+              <div className="absolute -bottom-3 -right-3 w-5 h-5 border-b-2 border-r-2 border-neon" />
+
+              {/* ── Photo container ── */}
+              <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 bg-space"
+                   style={{ boxShadow: '0 0 60px rgba(0,212,255,0.15), 0 0 120px rgba(123,97,255,0.1)' }}>
+
+                {/* Scanning laser */}
+                <div className="scan-line" />
+
+                {/* Photo */}
+                <img
+                  src="/profile.jpg"
+                  alt="Biswajeet – Product & Growth Engineer"
+                  className="w-full h-full object-cover object-top"
+                  style={{ filter: 'saturate(1.1) contrast(1.05)' }}
+                  onError={(e) => {
+                    e.target.src =
+                      'https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=400&auto=format&fit=crop';
+                  }}
+                />
+
+                {/* Soft colour tint */}
+                <div className="absolute inset-0 bg-gradient-to-t from-space/60 via-transparent to-transparent" />
+                {/* Blue cast */}
+                <div className="absolute inset-0 mix-blend-color-dodge bg-gradient-to-br from-electric/5 to-transparent" />
+              </div>
+
+              {/* ── ID Badge ── */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-space/90 backdrop-blur-md border border-white/10 px-4 py-1.5 rounded-full shadow-lg flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                <span className="text-[10px] font-mono text-gray-300 uppercase tracking-widest">ID: B-OS-V1 · Available</span>
+              </div>
+
+            </div>
+          </motion.div>
 
         </div>
-      </div>
-    </Section>
+      </Section>
   );
 }

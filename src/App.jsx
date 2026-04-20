@@ -1,36 +1,31 @@
 import React from 'react';
-import Hero from './sections/Hero';
-import About from './sections/About';
-import Product from './sections/Product';
-import Growth from './sections/Growth';
-import ContentSection from './sections/Content';
-import Infra from './sections/Infra';
-import Achievements from './sections/Achievements';
-import Future from './sections/Future';
-import Tools from './sections/Tools';
-import Contact from './sections/Contact';
 import CanvasBackground from './3d/CanvasBackground';
+import ZoomPageContainer from './components/ZoomPageContainer';
+import MoonCursor from './components/MoonCursor';
 
 function App() {
   return (
-    <div className="relative min-h-screen">
-      {/* 3D Background Layer */}
+    <div className="relative">
+      {/* Custom crescent moon cursor */}
+      <MoonCursor />
+
+      {/* 3D Background — always fixed behind everything */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <CanvasBackground />
       </div>
 
-      {/* Main Content Layer */}
+      {/* Vignette overlay so text is always readable */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 90% 70% at 50% 50%, transparent 50%, rgba(11,15,25,0.6) 100%)',
+        }}
+      />
+
+      {/* Full page zoom container — no scroll, zoom transitions */}
       <div className="relative z-10">
-        <Hero />
-        <About />
-        <Product />
-        <Growth />
-        <ContentSection />
-        <Infra />
-        <Achievements />
-        <Future />
-        <Tools />
-        <Contact />
+        <ZoomPageContainer />
       </div>
     </div>
   );
